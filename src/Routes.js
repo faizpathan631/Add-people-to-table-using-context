@@ -1,6 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import App from './Add-people-to-table-using-context-in-class-component/App'
+import App from './Add-People-to-table-using-context-in-ClassComponent/App'
+import { DataProvider } from './Add-People-to-table-using-context-in-ClassComponent/DataContext'
+import data from './Add-People-to-table-using-context-in-ClassComponent/Data'
 
 function Routing() {
   return (
@@ -8,13 +10,15 @@ function Routing() {
       <div>
         <ul>
           <li>
-            <Link to='/ReminderApp'>
+            <Link to='/App'>
               Add people to table using context in class component
             </Link>
           </li>
         </ul>
         <hr />
-        <Route path='/App' component={App} />
+        <DataProvider value={data}>
+          <Route path='/App' component={App} />
+        </DataProvider>
       </div>
     </Router>
   )
