@@ -1,11 +1,19 @@
 import React from 'react'
 import DataContext from './DataContext'
+import ReactModal from 'react-modal'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       data: [],
+      addNewPerson: false,
+      addedPerson: {
+        id: `${data ? data.length++ : ''}`,
+        name: '',
+        age: '',
+        gender: '',
+      },
     }
   }
   static contextType = DataContext
@@ -13,6 +21,22 @@ export default class App extends React.Component {
   componentDidMount() {
     const dataContext = this.context
     this.setState({ data: dataContext })
+  }
+  handleCloseModal = () => {
+    this.setState({ addNewPerson: false })
+  }
+  handleChange = (e) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      addedPerson: {
+        ...prevState.addedPerson,
+        [e.target.name]: e.target.value,
+      },
+    }))
+  }
+  submitData = () => {
+    this.setState({ data: this.state.data.concat(this.state.addedPerson) })
+    this.handleCloseModal()
   }
   render() {
     return (
@@ -39,6 +63,46 @@ export default class App extends React.Component {
             ))}
           </tbody>
         </table>
+
+        <ReactModal
+          isOpen={this.state.addNewPerson}
+          onRequestClose={this.handleCloseModal}
+          ariaHideApp={false}
+        >
+          <button onClick={this.handleCloseModal}>Close Modal</button>
+          <br />
+          <>
+            <label>Id:</label>
+            <input
+              name='id'
+              onChange={(e) => this.handleChange(e)}
+              value={this.state.addedPerson.id}
+            />
+            <br />
+            <label>Name:</label>
+            <input
+              name='name'
+              onChange={(e) => this.handleChange(e)}
+              value={this.state.addedPerson.name}
+            />
+            <br />
+            <label>Age:</label>
+            <input
+              name='age'
+              onChange={(e) => this.handleChange(e)}
+              value={this.state.addedPerson.age}
+            />
+            <br />
+            <label>Gender:</label>
+            <input
+              name='gender'
+              onChange={(e) => this.handleChange(e)}
+              value={this.state.addedPerson.gender}
+            />
+          </>
+          <br />
+          <button onClick={this.submitData}>Submit</button>
+        </ReactModal>
       </>
     )
   }
