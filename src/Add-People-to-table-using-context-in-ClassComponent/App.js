@@ -42,7 +42,7 @@ export default class App extends React.Component {
     return (
       <>
         <button onClick={() => this.setState({ addNewPerson: true })}>
-          Add new Person to table{' '}
+          Add new Person
         </button>
         {console.log(this.state)}
         <table>
