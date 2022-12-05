@@ -1,6 +1,7 @@
 import React from 'react'
 import DataContext from './DataContext'
 import ReactModal from 'react-modal'
+import data from './Data'
 
 export default class App extends React.Component {
   constructor(props) {
