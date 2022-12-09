@@ -1,7 +1,6 @@
 import React from 'react'
 import DataContext from './DataContext'
 import ReactModal from 'react-modal'
-import data from './Data'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -9,8 +8,9 @@ export default class App extends React.Component {
     this.state = {
       data: [],
       addNewPerson: false,
+      error: false,
       addedPerson: {
-        id: `${data ? data.length++ : ''}`,
+        id: '',
         name: '',
         age: '',
         gender: '',
@@ -18,7 +18,9 @@ export default class App extends React.Component {
     }
   }
   static contextType = DataContext
-
+  checkNull(val) {
+    return val === null || val === undefined || val === ''
+  }
   componentDidMount() {
     const dataContext = this.context
     this.setState({ data: dataContext })
@@ -36,7 +38,7 @@ export default class App extends React.Component {
     }))
   }
   submitData = () => {
-    this.setState({ data: this.state.data.concat(this.state.addedPerson) })
+    this.setState({ data: [...this.state.data, this.state.addedPerson] })
     this.handleCloseModal()
   }
   render() {
@@ -45,7 +47,6 @@ export default class App extends React.Component {
         <button onClick={() => this.setState({ addNewPerson: true })}>
           Add new Person
         </button>
-        {console.log(this.state)}
         <table>
           <thead>
             <tr>
@@ -72,6 +73,7 @@ export default class App extends React.Component {
         >
           <button onClick={this.handleCloseModal}>Close Modal</button>
           <br />
+          <br />
           <>
             <label>Id:</label>
             <input
@@ -80,12 +82,14 @@ export default class App extends React.Component {
               value={this.state.addedPerson.id}
             />
             <br />
+            <br />
             <label>Name:</label>
             <input
               name='name'
               onChange={(e) => this.handleChange(e)}
               value={this.state.addedPerson.name}
             />
+            <br />
             <br />
             <label>Age:</label>
             <input
@@ -94,15 +98,31 @@ export default class App extends React.Component {
               value={this.state.addedPerson.age}
             />
             <br />
+            <br />
             <label>Gender:</label>
-            <input
+            <select
               name='gender'
               onChange={(e) => this.handleChange(e)}
               value={this.state.addedPerson.gender}
-            />
+            >
+              <option value=''></option>
+              <option value='F'>Female</option>
+              <option value='M'>Male</option>
+            </select>
           </>
           <br />
-          <button onClick={this.submitData}>Submit</button>
+          <br />
+          <button
+            disabled={
+              this.checkNull(this.state.addedPerson.id) ||
+              this.checkNull(this.state.addedPerson.name) ||
+              this.checkNull(this.state.addedPerson.age) ||
+              this.checkNull(this.state.addedPerson.gender)
+            }
+            onClick={this.submitData}
+          >
+            Submit
+          </button>
         </ReactModal>
       </>
     )
